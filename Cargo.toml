@@ -1,17 +1,25 @@
-[workspace]
-resolver = "2"
-members = [
-    "runtime-rust",
-    "parseit",
-    "sdk-rust",
-    "sdk-debugger",
-    "sdk-unicode-gen",
-    "himecc",
-    "tests-executor-rust",
-    "tests-driver",
-    "langserv"
-]
+[package]
+name = "hime_redist"
+version = "4.3.0"
+authors = ["Laurent Wouters <lwouters@cenotelie.fr>"]
+description = "Redistributable runtime library for parsers generated with Hime (LR, RNGLR)."
+documentation = "https://cenotelie.fr/projects/hime"
+homepage = "https://cenotelie.fr/projects/hime"
+repository = "https://github.com/cenotelie/hime"
+readme = "README.md"
+keywords = ["hime", "parser", "lr", "glr", "rnglr"]
+categories = ["algorithms", "parsing", "parser-implementations", "text-processing"]
+license = "LGPL-3.0"
+include = ["README.md", "Cargo.toml", "build.rs", "src/**/*.rs"]
+edition = "2021"
 
-[patch.crates-io]
-hime_redist = { path = "./runtime-rust" }
-hime_sdk = { path = "./sdk-rust" }
+[features]
+default = ["std"]
+debug = []
+std = ["serde/std"]
+
+[dependencies]
+serde = { version = "1", default-features = false, features = ["derive", "alloc"] }
+
+[badges]
+maintenance = { status = "actively-developed" }

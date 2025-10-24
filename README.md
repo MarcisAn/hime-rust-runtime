@@ -1,86 +1,35 @@
-# README #
+# Hime Rust Runtime #
 
-[![Build Status](https://dev.azure.com/cenotelie/cenotelie/_apis/build/status%2Fcenotelie.hime?branchName=master)](https://dev.azure.com/cenotelie/cenotelie/_build/latest?definitionId=6&branchName=master)
-[![Crates.io](https://img.shields.io/crates/v/hime_redist.svg)](https://crates.io/crates/hime_redist)
+The Rust implementation of the runtime for lexers and parsers generated with [Hime](https://github.com/cenotelie/hime).
+For more information about how to generate parsers using Hime, head to [Hime](https://cenotelie.fr/projects/hime).
+The code for this library is available on [Github](https://github.com/cenotelie/hime).
+The API documentation is available on [docs.rs](https://docs.rs/hime_redist/latest/hime_redist/).
+This software is developed by the [Assocation Cénotélie](https://cenotelie.fr/), France.
 
-Hime is a parser generator that targets .Net, Java and Rust.
-Hime relies on the [LR](https://en.wikipedia.org/wiki/LR_parser)
-family of parsing techniques, including the state of the art
-[RNGLR algorithm]((http://portal.acm.org/citation.cfm?id=1146809.1146810&coll=DL&dl=GUIDE&CFID=9339017&CFTOKEN=49072692)) for generalized LR parsing used for
-ambiguous grammars. Hime provides a powerful, expressive,
-and feature-rich grammar language with support for
-[template syntactic rules](http://cenotelie.fr/projects/hime/referenceLangTemplates),
-[context-sensitive lexing](http://cenotelie.fr/projects/hime/referenceLangContextSensitive)
-(useful for contextal keywords),
-[tree actions](http://cenotelie.fr//projects/hime/referenceLangTreeActions)
-(useful for clean syntax trees), and more!
-Hime strongly emphasizes the separation of data and code. Hime forbids the inclusion of inline code in its grammar definitions in order to have very readable grammars that can be easily understood, debugged, improved. It is still possible to have custom code invoked during parsing with semantic actions.
+## Usage ##
 
-The generated parsers require a runtime, available for the following platforms:
+This crate is [on crates.io](https://crates.io/crates/hime_redist) and can be
+used by adding `hime_redist` to your dependencies in your project's `Cargo.toml`.
 
-* [.Net framework](https://www.nuget.org/packages/Hime.Redist/)
-* [JVM](https://central.sonatype.com/artifact/fr.cenotelie.hime/hime-redist)
-* [Rust](https://crates.io/crates/hime_redist)
-
-## Parser generator
-
-The parser generator (himecc) has native builds for Windows, MacOS and Linux.
-* [Windows](https://cenotelie.s3.fr-par.scw.cloud/hime/stable/windows/himecc.exe)
-* [Linux](https://cenotelie.s3.fr-par.scw.cloud/hime/stable/linux-musl/himecc)
-* [MacOS](https://cenotelie.s3.fr-par.scw.cloud/hime/stable/macos/himecc)
-
-Alternatively, himecc can be built and installed from sources with cargo :
-
-```bash
-cargo install hime_compiler
+```toml
+[dependencies]
+hime_redist = "4.3"
 ```
 
-See all download options in [the download page of the doc](https://cenotelie.fr/projects/hime/download).
+Generated lexer and parser codes will import this crate and provide a simple API to parse input text.
 
-## How do I use this software? ##
+## Support for `no_std`
 
-* [Complete user documentation](https://cenotelie.fr/projects/hime)
-* [Grammar library](https://github.com/cenotelie/hime-grams)
+As of version `4.3.0`, this crate support `no_std` contexts.
+This crate has an `std` feature which is activated by default for retro-compatibility but can deactivated as follow:
 
-
-## License
-
-All software is available under the terms of the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
-
-## Repository structure ##
-
-* Runtime implementations
-	* `runtime-net`: .Net implementation of the runtime.
-	* `runtime-java`: Java implementation of the runtime.
-	* `runtime-rust`: Rust implementation of the runtime.
-* SDK
-	* `sdk-rust`: Rust implementation of the SDK for parser generation.
-	* `sdk-debugger`: CLI tool to inspect and debug generated binary automata.
-	* `sdk-unicode-gen`: CLI tool to generate the code to be put in `sdk-rust` related to unicode blocks and categories.
-* Final tools
-	* `himecc`: Rust implementation of the parser generator CLI.
-	* `parseit`: Rust implementation of the tool for parsing bits of texts using a previously generated parser assembly.
-	* `langserv`: Language server for the Hime grammar language.
-* Tests
-	* `tests-driver`: Sources of the tests driver for all runtime tests.
-	* `tests-executor-net`: Sources of the test executor for the .Net runtime implementation.
-	* `tests-executor-java`: Sources of the test executor for the Java runtime implementation.
-	* `tests-executor-rust`: Sources of the test executor for the Rust runtime implementation.
-* Others
-	* `.assets`: Contains some extra products, e.g. standard grammars.
-	* `.releng`: Contains the release engineering artifacts.
-
-
-## How to build ##
-
-To build the code and execute all tests, run
-
-```
-$ sh build.sh
+```toml
+[dependencies]
+hime_redist = { version = "4.3", default-features = false }
 ```
 
-Note that the development environment is fully dockerized and executing this command requires docker and will pull the required docker image if not locally available.
-
+The only dependency of this crate (`serde`) also does not require `std` support, and will only use its `std` feature when the `std` feature of this crate is activated (which it is by default).
+De-activating `std` for this crate also de-activates `std` for serde.
 
 ## How can I contribute? ##
 
@@ -93,3 +42,8 @@ The simplest way to contribute is to:
 Patches can also be submitted by email, or through the [issue management system](https://github.com/cenotelie/hime/issues).
 
 The [isse tracker](https://github.com/cenotelie/hime/issues) contains tickets that are accessible to newcomers. Look for tickets with `[beginner]` in the title. These tickets are good ways to become more familiar with the project and the codebase.
+
+## License ##
+
+This software is licenced under the Lesser General Public License (LGPL) v3.
+Refers to the `LICENSE.txt` file at the root of the repository for the full text, or to [the online version](http://www.gnu.org/licenses/lgpl-3.0.html).
